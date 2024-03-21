@@ -1,6 +1,6 @@
 <template>
   <main>
-   
+    <TheMovie />
   </main>
   <div>
     {{ title }}
@@ -17,8 +17,12 @@
 import { useQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
 import { onMounted } from 'vue'
+import TheMovie from '@/components/TheMovie.vue'
 
 export default {
+  components: {
+    TheMovie
+  },
   setup() {
 
    const { result, refetch } = useQuery( GET_MOVIE_QUERY)
