@@ -1,6 +1,6 @@
 <template>
     <section class="wrapper">
-        <h2>
+        <h2 class="title">
             {{ title }}
         </h2>
         <div>
@@ -20,24 +20,20 @@
 export default {
     props: {
         title: {
-            type: String,
-            required: false,
-            default: "Title"
+            type: Array,
+            required: false
         },
         description: {
-            type: String,
-            required: false,
-            default: "..."
+            type: Array,
+            required: false
         },
         release: {
-            type: Number,
-            required: false,
-            default: 1999
+            type: Array,
+            required: false
         },
         length: {
-            type: Number,
-            required: false,
-            default: 0
+            type: Array,
+            required: false
         }
     },
     setup() {
@@ -48,9 +44,13 @@ export default {
 
 <style scoped>
 .wrapper {
-    border: 0.5rem solid green;
+    border: 0.3rem solid green;
     width: fit-content;
     padding: 1rem;
     margin: 1rem;
+}
+
+.title {
+    text-align: center;
 }
 </style>

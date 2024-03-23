@@ -1,22 +1,17 @@
 <template>
   <main>
-    <TheMovie />
+    <TheMovie
+      :title="title" 
+      :description="description" 
+      :release="release"
+      :length="length"
+    />
   </main>
-  <div>
-    {{ title }}
-    {{ id }}
-  </div>
-  <div>
-    {{ result }}
-  </div>
-  <img :src="pic.img">
-  <div>{{ pic.img }}</div>
 </template>
 
 <script lang="ts">
 import { useQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
-import { onMounted } from 'vue'
 import TheMovie from '@/components/TheMovie.vue'
 
 export default {
@@ -25,25 +20,25 @@ export default {
   },
   setup() {
 
-   const { result, refetch } = useQuery( GET_MOVIE_QUERY)
+   const { result } = useQuery( GET_MOVIE_QUERY)
     
-    let title = result.value?.moviesEntries.map((e: any) => e.title) || []
-    let id = result.value?.moviesEntries.map((e: any) => e.id) || []
-    let pic = result.value?.moviesEntries.map((e: any) => e.url) || []
+    const title = result.value?.moviesEntries.map((e: any) => e.title)
+    const description = result.value?.moviesEntries.map((e: any) => e.description)
+    const release = result.value?.moviesEntries.map((e: any) => e.release)
+    const length = result.value?.moviesEntries.map((e: any) => e.length)
+    const pic = result.value?.moviesEntries.map((e: any) => e.url)
     
     console.log("..................", result.value)
-    
-    onMounted(async () => {
-      await refetch()
-    })
     
     //console.log("Title: ", title.value)
 
     return {
-      title,
-      id,
       result,
-      pic
+      title,
+      description,
+      pic,
+      release,
+      length
     }
   }
 }

@@ -8,6 +8,7 @@ query getMovie {
         title
         release
         length
+        description
         pic {
             img
         }
