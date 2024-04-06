@@ -16,6 +16,15 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue'
+// import type movieInterface from '@/type/movieInterface'
+
+interface MovieInterface {
+    title: any
+    description: any
+    release: any
+    length: any
+}
 
 export default {
     props: {

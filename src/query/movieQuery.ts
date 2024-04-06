@@ -6,12 +6,9 @@ query getMovie {
       ... on movies_default_Entry {
         id
         title
+        description
         release
         length
-        description
-        pic {
-            img
-        }
       }
     }
 }`
