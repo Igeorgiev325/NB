@@ -7,6 +7,7 @@ query getMovie {
         id
         title
         description
+        genre
         release
         length
       }

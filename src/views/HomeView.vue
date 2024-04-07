@@ -1,9 +1,10 @@
 <template>
-  <main>
+  <main class="main">
     <TheMovie
       v-for="movie in movies"
       :title="movie.title"
       :description="movie.description"
+      :genre="movie.genre"
       :release="movie.release"
       :length="movie.length"
     />
@@ -33,7 +34,7 @@ export default {
 
     const movies = computed(() => result.value?.moviesEntries)
 
-    console.log(movies.value)
+    watch(movies, (val) => console.log(val))
 
 
     return {
@@ -45,5 +46,8 @@ export default {
 </script>
 
 <style scoped>
-
+.main {
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>
