@@ -32,6 +32,19 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   width: 20rem;
+  padding: 0.5rem 1rem 0;
 }
+
+a {
+  color: teal;
+  text-decoration: none;
+  font-size: large;
+  font-weight: bold;
+}
+
+.router-link-active {
+  text-decoration: overline white solid 0.1rem; 
+}
+
 </style>
 

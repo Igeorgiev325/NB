@@ -3,14 +3,19 @@
         <h2 class="title">
             {{ title }}
         </h2>
-        <div>
+        <div class="description">
             {{ description }}
         </div>
-        <div>
-            {{ release }}
+        <div class="genre">
+            {{ genre }}
         </div>
-        <div>
-            {{ length }}
+        <div class="releaseAndLength">
+            <div class="release">
+                Release date: {{ release }}
+            </div>
+            <div class="length">
+                Length: {{ length }} mins
+            </div>
         </div>
     </section>
 </template>
@@ -36,6 +41,10 @@ export default {
             type: Array,
             required: false
         },
+        genre: {
+            type: Array,
+            required: false
+        },
         release: {
             type: Array,
             required: false
@@ -53,13 +62,25 @@ export default {
 
 <style scoped>
 .wrapper {
-    border: 0.3rem solid green;
-    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    border: 0.3rem solid teal;
+    /* width: 35rem; */
     padding: 1rem;
     margin: 1rem;
 }
 
 .title {
     text-align: center;
+    padding: 1rem;
+}
+
+.description {
+    padding-bottom: 1rem
+}
+
+.releaseAndLength {
+    display: flex;
+    justify-content: space-evenly;
 }
 </style>
