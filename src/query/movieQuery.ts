@@ -10,6 +10,11 @@ query getMovie {
         genre
         release
         length
+        featureImage {
+                url
+                id
+                title
+            }
       }
     }
 }`

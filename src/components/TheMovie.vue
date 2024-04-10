@@ -1,5 +1,6 @@
 <template>
     <section class="wrapper">
+        <img :src="featureImage">
         <h2 class="title">
             {{ title }}
         </h2>
@@ -51,6 +52,10 @@ export default {
         },
         length: {
             type: Array,
+            required: false
+        },
+        featureImage: {
+            type: String,
             required: false
         }
     },
