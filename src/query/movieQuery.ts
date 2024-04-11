@@ -11,10 +11,11 @@ query getMovie {
         release
         length
         featureImage {
-                url
-                id
-                title
-            }
+          url
+          id
+          title
+        }
       }
     }
+    entryCount(section: "movies")
 }`

@@ -1,4 +1,5 @@
 <template>
+  <div class="movie-count">{{ moviesCount }}</div>
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
@@ -7,7 +8,7 @@
       :genre="movie.genre"
       :release="movie.release"
       :length="movie.length"
-      :featureImage="movie.featureImage[0].url"
+      :featureImage="movie.featureImage[0]?.url"
     />
   </main>
   <TheButton @emit-value="handleEmitValue($event)"/>
@@ -33,18 +34,11 @@ export default {
 
     const { result, load } = useLazyQuery(GET_MOVIE_QUERY)
 
-    const { result: ImageResult } = useQuery(GET_MOVIE_IMAGE)
-
-    // const title = computed(() => result.value?.moviesEntries.map((e: any) => e.title))
-    // const description = computed(() => result.value?.moviesEntries.map((e: any) => e.description))
-    // const release = computed(() => result.value?.moviesEntries.map((e: any) => e.release))
-    // const length = computed(() => result.value?.moviesEntries.map((e: any) => e.length))
-
     const movies = computed(() => result.value?.moviesEntries)
 
-    const moviesImages = computed(() => ImageResult.value?.moviesEntries)
+    const moviesCount = computed(() => result.value?.entryCount)
 
-    console.log("movieImages", moviesImages.value)
+    watch(moviesCount, val => console.log("moviesCount", val))
 
     watch(movies, (val) => console.log(val))
 
@@ -71,7 +65,8 @@ export default {
     return {
       movies,
       handleEmitValue,
-      showEvents
+      showEvents,
+      moviesCount
     }
   }
 }
@@ -79,8 +74,14 @@ export default {
 </script>
 
 <style scoped>
+.movie-count {
+  display: flex;
+  justify-content: end;
+  margin-right: 2rem;
+}
 .main {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 </style>

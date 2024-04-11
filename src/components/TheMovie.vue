@@ -1,6 +1,6 @@
 <template>
     <section class="wrapper">
-        <img :src="featureImage">
+        <img :src='featureImage ? featureImage : defaultImage'>
         <h2 class="title">
             {{ title }}
         </h2>
@@ -28,8 +28,10 @@ import type { PropType } from 'vue'
 interface MovieInterface {
     title: any
     description: any
+    genre: any
     release: any
     length: any
+    featureImage: any
 }
 
 export default {
@@ -60,7 +62,11 @@ export default {
         }
     },
     setup() {
-
+        const defaultImage: string = `@/assets/alien.jpg`
+        
+        return {
+            defaultImage
+        }
     }
 }
 </script>
