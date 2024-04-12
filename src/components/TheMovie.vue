@@ -1,6 +1,6 @@
 <template>
     <section class="wrapper">
-        <img :src='featureImage ? featureImage : defaultImage'>
+        <img :src='featureImage ?? defaultImage'>
         <h2 class="title">
             {{ title }}
         </h2>
