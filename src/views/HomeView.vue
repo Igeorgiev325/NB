@@ -1,6 +1,7 @@
 <template>
   <div class="movie-count">{{ moviesCount }}</div>
-  <SearchByTitle></SearchByTitle>
+  <SearchByTitle v-model:title="textFromEmit"></SearchByTitle>
+  <TheButton button="clear the query" @emit-value="handleEmitValue($event)"/>
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
@@ -9,10 +10,9 @@
       :genre="movie.genre"
       :release="movie.release"
       :length="movie.length"
-      :featureImage="movie.featureImage[0]?.url"
+      :featureImage="movie.featureImage[0].url"
     />
   </main>
-  <TheButton button="clear the query" @emit-value="handleEmitValue($event)"/>
 </template>
 
 <script lang="ts">
@@ -30,7 +30,13 @@ export interface moviesModel {
   genre: string[],
   release: string[],
   length: number[],
-  featureImage: any
+  featureImage: featureImageModel[]
+}
+
+export interface featureImageModel {
+  id: string,
+  title: string,
+  url: string
 }
 
 export default {
@@ -42,6 +48,7 @@ export default {
   setup() {
 
     const valueFromEmit = ref<boolean>()
+    const textFromEmit = ref<string>()
     const showEvents = ref<boolean | undefined>(true)
     const movies = ref<moviesModel[]>()
     const moviesCount = ref<number>()
@@ -65,6 +72,9 @@ export default {
       valueFromEmit.value = val
     }
 
+    watch(textFromEmit, newText => {
+      console.log("New Text", newText)
+    })
 
     onMounted(() => {
       load()
@@ -87,7 +97,8 @@ export default {
       movies,
       handleEmitValue,
       showEvents,
-      moviesCount
+      moviesCount,
+      textFromEmit
     }
   }
 }
