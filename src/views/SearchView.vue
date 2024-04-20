@@ -3,6 +3,9 @@
     <SearchByTitle v-model:title="searchValue"></SearchByTitle>
     <TheButton button="Search" @click="Search()"/>
   </div>
+  <div class="dropdown">
+    <TheDropdown genre="Genre" date="Date"></TheDropdown>
+  </div>
   <div class="button-clear">
     <TheButton button="Clear" @is-button="handleEmitValue($event)" />
   </div>
@@ -16,60 +19,30 @@ import SearchByTitle from '@/components/SearchByTitle.vue';
 import TheButton from '@/components/TheButton.vue';
 import TheDropdown from '@/components/TheDropdown.vue';
 
-export interface moviesModel {
-  title: string,
-  description: string,
-  genre: string[],
-  release: string,
-  length: number,
-  featureImage: featureImageModel[]
-}
-
-export interface featureImageModel {
-  id: string,
-  title: string,
-  url: string
-}
-
 export default {
   components: {
     SearchByTitle,
     TheDropdown,
     TheButton
   },
-  setup(props, { emit }) {
+  setup() {
 
     const searchValue = ref<string>()
     const writtenValue = ref<string>()
 
-    const movies = ref<any>()
+    const isTrue = ref<boolean>()
 
-    const valueFromEmit = ref<boolean>()
-    const textFromEmit = ref<string>()
+    // const returnTitle = computed(() => movies.value?.map((e: any) => e.title))
 
-    let getGenre = ref<string[]>()
+    // watch(returnTitle, newReturnTitle => {
+    //   console.log("Titles:", newReturnTitle)
+    // })
 
-    const { result } = useLazyQuery(GET_MOVIE_QUERY)
+    // const matchSearch = computed(() => returnTitle.value?.includes((writtenValue.value as string)))
 
-    // const movies = computed(() => result.value?.moviesEntries)
-
-    watch(result, val => {
-      movies.value = val.moviesEntries
-      getGenre.value = val.moviesEntries.map((e: any) => e.genre)
-
-      emit('emit-movies', movies)
-      console.log("Genre", getGenre.value)
-      console.log(movies.value)
-    })
-
-    const returnTitle = computed(() => movies.value?.map((e: any) => e.title))
-    watch(returnTitle, newReturnTitle => {
-      console.log("Titles:", newReturnTitle)
-    })
-    const matchSearch = computed(() => returnTitle.value?.includes((writtenValue.value as string)))
-    watch(matchSearch, newMatchSearch => {
-      console.log("Is there match:", matchSearch.value)
-    })
+    // watch(matchSearch, newMatchSearch => {
+    //   console.log("Is there match:", matchSearch.value)
+    // })
 
     const Search = () => {
       writtenValue.value = searchValue.value
@@ -77,15 +50,11 @@ export default {
     }
 
     const handleEmitValue = (val: boolean) => {
-      valueFromEmit.value = val
+      isTrue.value = val
     }
 
-    watch(textFromEmit, newText => {
-      console.log("New Text", newText)
-    })
-
-    watch(valueFromEmit, newValueFromEmit => {
-      if (newValueFromEmit) {
+    watch(isTrue, newIsTrue => {
+      if (newIsTrue) {
         clearQuery()
       }
     })
@@ -112,5 +81,9 @@ export default {
   display: flex;
   justify-content: center;
   padding: 1rem 0 1rem 0;
+}
+.dropdown {
+  display: flex;
+  justify-content: center;
 }
 </style>

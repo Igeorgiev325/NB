@@ -1,5 +1,6 @@
 <template>
   <div class="movie-count">{{ moviesCount }}</div>
+  <SearchView></SearchView>
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
@@ -18,9 +19,7 @@ import { ref, watch, computed, onMounted } from 'vue'
 import { useQuery, useLazyQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
 import TheMovie from '@/components/TheMovie.vue'
-import TheButton from '@/components/TheButton.vue'
-import SearchByTitle from '@/components/SearchByTitle.vue'
-import { GET_MOVIE_IMAGE } from '@/query/imageQuery'
+import SearchView from './SearchView.vue'
 
 export interface moviesModel {
   title: string,
@@ -40,8 +39,7 @@ export interface featureImageModel {
 export default {
   components: {
     TheMovie,
-    TheButton,
-    SearchByTitle
+    SearchView
   },
   setup() {
 
@@ -65,7 +63,6 @@ export default {
 
     watch(result, val => {
       moviesCount.value = val.entryCount
-      console.log("moviesCount", moviesCount.value)
     })
 
     onMounted(() => {
