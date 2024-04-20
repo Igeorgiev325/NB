@@ -37,11 +37,11 @@ interface MovieInterface {
 export default {
     props: {
         title: {
-            type: Array,
+            type: String,
             required: false
         },
         description: {
-            type: Array,
+            type: String,
             required: false
         },
         genre: {
@@ -49,11 +49,11 @@ export default {
             required: false
         },
         release: {
-            type: Array,
+            type: String,
             required: false
         },
         length: {
-            type: Array,
+            type: Number,
             required: false
         },
         featureImage: {

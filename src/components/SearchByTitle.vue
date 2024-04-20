@@ -1,5 +1,6 @@
 <template>
-    <input 
+    <input
+        class="search-text" 
         type="text" 
         placeholder="Search by title" 
         :value="title"
@@ -10,13 +11,19 @@
 <script lang="ts">
 
 export default {
-    props: {
-        title: String
-    },
-    emits: ['update:title'],
-    setup() {
+  props: {
+    title: String
+  },
+  emits: ['update:title'],
+  setup() {
 
-    }
+  }
 }
 
 </script>
+
+<style scoped>
+.search-text {
+  width: 30rem;
+}
+</style>
