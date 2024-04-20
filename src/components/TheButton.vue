@@ -14,7 +14,7 @@ export default {
             default: 'Push'
         }
     },
-    emits: ["emitValue"],
+    emits: ["isButton"],
     setup(props, { emit }) {
         let buttonValue = ref<boolean>(false)
 
@@ -22,7 +22,7 @@ export default {
         
 
         watch(buttonValue, (val) => {
-            emit("emitValue", val)
+            emit("isButton", val)
         })
         return {
             buttonValue,

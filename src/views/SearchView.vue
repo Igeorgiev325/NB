@@ -4,7 +4,7 @@
     <TheButton button="Search" @click="Search()"/>
   </div>
   <div class="button-clear">
-    <TheButton button="Clear" @emit-value="handleEmitValue($event)" />
+    <TheButton button="Clear" @is-button="handleEmitValue($event)" />
   </div>
 </template>
 
@@ -45,6 +45,7 @@ export default {
     const movies = ref<any>()
 
     const valueFromEmit = ref<boolean>()
+    const textFromEmit = ref<string>()
 
     let getGenre = ref<string[]>()
 
@@ -78,6 +79,10 @@ export default {
     const handleEmitValue = (val: boolean) => {
       valueFromEmit.value = val
     }
+
+    watch(textFromEmit, newText => {
+      console.log("New Text", newText)
+    })
 
     watch(valueFromEmit, newValueFromEmit => {
       if (newValueFromEmit) {

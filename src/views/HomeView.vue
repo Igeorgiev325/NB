@@ -1,7 +1,5 @@
 <template>
   <div class="movie-count">{{ moviesCount }}</div>
-  <SearchByTitle v-model:title="textFromEmit"></SearchByTitle>
-  <TheButton button="clear the query" @emit-value="handleEmitValue($event)"/>
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
@@ -25,11 +23,11 @@ import SearchByTitle from '@/components/SearchByTitle.vue'
 import { GET_MOVIE_IMAGE } from '@/query/imageQuery'
 
 export interface moviesModel {
-  title: string[],
-  description: string[],
+  title: string,
+  description: string,
   genre: string[],
-  release: string[],
-  length: number[],
+  release: string,
+  length: number,
   featureImage: featureImageModel[]
 }
 
@@ -47,11 +45,10 @@ export default {
   },
   setup() {
 
-    const valueFromEmit = ref<boolean>()
-    const textFromEmit = ref<string>()
     const showEvents = ref<boolean | undefined>(true)
     const movies = ref<moviesModel[]>()
     const moviesCount = ref<number>()
+    let getGenre = ref<string[]>()
 
     const { result, load } = useLazyQuery(GET_MOVIE_QUERY)
 
@@ -59,6 +56,10 @@ export default {
 
     watch(result, val => {
       movies.value = val.moviesEntries
+      getGenre.value = val.moviesEntries.map((e: any) => e.genre)
+
+      
+      console.log("Genre", getGenre.value)
       console.log(movies.value)
     })
 
@@ -67,38 +68,14 @@ export default {
       console.log("moviesCount", moviesCount.value)
     })
 
-
-    const handleEmitValue = (val: boolean) => {
-      valueFromEmit.value = val
-    }
-
-    watch(textFromEmit, newText => {
-      console.log("New Text", newText)
-    })
-
     onMounted(() => {
       load()
     })
 
-
-    watch(valueFromEmit, newValueFromEmit => {
-      if (newValueFromEmit) {
-        clearQuery()
-      }
-    })
-    
-
-    const clearQuery = () => {
-      console.log("Clear the query")
-      movies.value = []
-    }
-
     return {
       movies,
-      handleEmitValue,
       showEvents,
-      moviesCount,
-      textFromEmit
+      moviesCount
     }
   }
 }
