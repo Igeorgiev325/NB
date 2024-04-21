@@ -4,6 +4,7 @@
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
+      :key ="movie.id"
       :title="movie.title"
       :description="movie.description"
       :genre="movie.genre"
@@ -27,7 +28,8 @@ export interface moviesModel {
   genre: string[],
   release: string,
   length: number,
-  featureImage: featureImageModel[]
+  featureImage: featureImageModel[],
+  id: string
 }
 
 export interface featureImageModel {
@@ -53,8 +55,8 @@ export default {
     // const movies = computed(() => result.value?.moviesEntries)
 
     watch(result, val => {
-      movies.value = val.moviesEntries
-      getGenre.value = val.moviesEntries.map((e: any) => e.genre)
+      movies.value = val.entries
+      getGenre.value = val.entries.map((e: any) => e.genre)
 
       
       console.log("Genre", getGenre.value)
