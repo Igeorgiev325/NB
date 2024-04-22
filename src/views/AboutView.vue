@@ -20,12 +20,12 @@ export default {
   setup() {
     const getResult = ref<any>()
 
-    // const genre = ref<string>('drama')
-    // const section = ref<string[]>(['Movies', 'Books'])
+    const genre = ref<string>('drama')
+    const section = ref<string[]>(['movies', 'books'])
 
     const { result, load } = useLazyQuery(GET_SPECIFIC_MOVIE, {
-      // genre, 
-      // section
+      genre, 
+      section
     })
 
     watch(result, value => {

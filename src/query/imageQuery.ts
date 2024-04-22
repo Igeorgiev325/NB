@@ -1,14 +1,12 @@
 import gql from 'graphql-tag'
 
-export const GET_MOVIE_IMAGE = gql`
-query getImage {
-  moviesEntries {
-    ... on movies_default_Entry {
-      featureImage {
-        url
-        id
-        title
-      }
+export const GET_MOVIE_DEFAULT_IMAGE = gql`
+query getDefaultImage {
+  asset (title: "Default movie") {
+    ... on images_Asset {
+      id
+      url
+      title
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <section class="wrapper">
-    <img :src='featureImage ?? defaultImage'>
+    <img :src='featureImage ?? (defaultImage as string)'>
     <h2 class="title">
       {{ title }}
     </h2>
@@ -22,6 +22,10 @@
 </template>
 
 <script lang="ts">
+import { GET_MOVIE_DEFAULT_IMAGE } from '@/query/imageQuery'
+import { useQuery, useLazyQuery } from '@vue/apollo-composable'
+import { watch, ref, onMounted } from 'vue'
+import  type defaultImageInterface  from '@/type/defaultImageInterface'
 import type { PropType } from 'vue'
 // import type movieInterface from '@/type/movieInterface'
 
@@ -62,7 +66,18 @@ export default {
     }
   },
   setup() {
-    const defaultImage: string = `@/assets/alien.jpg`
+    //const defaultImage: string = `@/assets/alien.jpg`
+    const defaultImage = ref<defaultImageInterface>()
+
+    const { result, load } = useLazyQuery(GET_MOVIE_DEFAULT_IMAGE)
+
+    onMounted(() => {
+      load()
+    })
+    watch(result, value => {
+      defaultImage.value = value.asset.url
+    })
+
   
     return {
       defaultImage
