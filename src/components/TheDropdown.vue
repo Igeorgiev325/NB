@@ -3,13 +3,13 @@
     <div class="genre-dropdown">
       <label for="length-select">{{ genre }}</label>
       <select id="length-select">
-        <option>Dog</option>
+        <option>{{ selectGenre }}</option>
       </select>
     </div>
     <div class="date-dropdown">
       <label for="date-select">{{ date }}</label>
       <select id="date-select">
-        <option>Cat</option>
+        <option>{{ selectDate }}</option>
       </select>
     </div>
   </div>
@@ -25,6 +25,16 @@ export default {
     date: {
       type: String,
       required: true
+    },
+    selectGenre: {
+      type: [String],
+      required: false,
+      default: 'Genre'
+    },
+    selectDate: {
+      type: [String],
+      required: false,
+      default: 'Date'
     }
   },
   setup() {

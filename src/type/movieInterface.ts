@@ -1,6 +1,10 @@
+import type defaultImageInterface from "./defaultImageInterface"
 export default interface MovieInterface {
-    title: any
-    description: any
-    release: any
-    length: any
+    id: string
+    title: string
+    description: string
+    genre: string[]
+    release: string
+    length: number
+    featureImage: defaultImageInterface[]
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="movie-count">{{ moviesCount }}</div>
-  <SearchView></SearchView>
+  <SearchView @emit-search="handleEmitSearch($event)"></SearchView>
   <main class="main">
     <TheMovie v-show="showEvents"
       v-for="movie in movies"
@@ -49,8 +49,11 @@ export default {
     const movies = ref<moviesModel[]>()
     const moviesCount = ref<number>()
     let getGenre = ref<string[]>()
+    const getValueFromSearch = ref<string>()
 
-    const { result, load } = useLazyQuery(GET_MOVIE_QUERY)
+    const { result, load } = useLazyQuery(GET_MOVIE_QUERY, {
+      getValueFromSearch
+    })
 
     // const movies = computed(() => result.value?.moviesEntries)
 
@@ -71,10 +74,16 @@ export default {
       load()
     })
 
+    const handleEmitSearch = (val: string) => {
+      getValueFromSearch.value = val
+      console.log("GET VALUE", getValueFromSearch.value)
+    }
+
     return {
       movies,
       showEvents,
-      moviesCount
+      moviesCount,
+      handleEmitSearch
     }
   }
 }

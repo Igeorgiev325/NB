@@ -25,27 +25,16 @@ export default {
     TheDropdown,
     TheButton
   },
-  setup() {
+  setup(props, {emit}) {
 
     const searchValue = ref<string>()
     const writtenValue = ref<string>()
 
-    const isTrue = ref<boolean>()
-
-    // const returnTitle = computed(() => movies.value?.map((e: any) => e.title))
-
-    // watch(returnTitle, newReturnTitle => {
-    //   console.log("Titles:", newReturnTitle)
-    // })
-
-    // const matchSearch = computed(() => returnTitle.value?.includes((writtenValue.value as string)))
-
-    // watch(matchSearch, newMatchSearch => {
-    //   console.log("Is there match:", matchSearch.value)
-    // })
+    const isTrue = ref<boolean>(false)
 
     const Search = () => {
       writtenValue.value = searchValue.value
+      emit('emitSearch', writtenValue.value)
       console.log("Written in input:", writtenValue.value)
     }
 
@@ -55,6 +44,7 @@ export default {
 
     watch(isTrue, newIsTrue => {
       if (newIsTrue) {
+        console.log(newIsTrue)
         clearQuery()
       }
     })
