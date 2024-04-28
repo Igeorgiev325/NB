@@ -1,4 +1,4 @@
-import type defaultImageInterface from "./defaultImageInterface"
+import type DefaultImageInterface from "./DefaultImageInterface"
 export default interface MovieInterface {
     id: string
     title: string
@@ -6,5 +6,5 @@ export default interface MovieInterface {
     genre: string[]
     release: string
     length: number
-    featureImage: defaultImageInterface[]
+    featureImage: DefaultImageInterface[]
 }

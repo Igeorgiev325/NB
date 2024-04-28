@@ -11,9 +11,9 @@ query getMovie ($getValueFromSearch: [String]) {
       release
       length
       featureImage {
-        url
         id
         title
+        url
       }
     }
   }

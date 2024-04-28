@@ -27,12 +27,12 @@ export default {
       required: true
     },
     selectGenre: {
-      type: [String],
+      type: String,
       required: false,
       default: 'Genre'
     },
     selectDate: {
-      type: [String],
+      type: String,
       required: false,
       default: 'Date'
     }

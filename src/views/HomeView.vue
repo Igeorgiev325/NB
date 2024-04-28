@@ -21,22 +21,7 @@ import { useQuery, useLazyQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
 import TheMovie from '@/components/TheMovie.vue'
 import SearchView from './SearchView.vue'
-
-export interface moviesModel {
-  title: string,
-  description: string,
-  genre: string[],
-  release: string,
-  length: number,
-  featureImage: featureImageModel[],
-  id: string
-}
-
-export interface featureImageModel {
-  id: string,
-  title: string,
-  url: string
-}
+import type { MoviesModel } from '@/type/MoviesMode'
 
 export default {
   components: {
@@ -46,22 +31,22 @@ export default {
   setup() {
 
     const showEvents = ref<boolean | undefined>(true)
-    const movies = ref<moviesModel[]>()
+    const movies = ref<MoviesModel[]>()
     const moviesCount = ref<number>()
-    let getGenre = ref<string[]>()
+    const getGenre = ref<string[]>()
+    const getRelease = ref<string[]>()
     const getValueFromSearch = ref<string>()
 
     const { result, load } = useLazyQuery(GET_MOVIE_QUERY, {
       getValueFromSearch
     })
 
-    // const movies = computed(() => result.value?.moviesEntries)
-
     watch(result, val => {
       movies.value = val.entries
-      getGenre.value = val.entries.map((e: any) => e.genre)
+      getGenre.value = val.entries.map((element: MoviesModel) => element.genre.toString())
+      getRelease.value = val.entries.map((element: MoviesModel) => element.release.slice(0, 10))
 
-      
+      console.log("Release", getRelease.value)
       console.log("Genre", getGenre.value)
       console.log(movies.value)
     })

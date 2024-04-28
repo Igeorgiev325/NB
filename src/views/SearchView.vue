@@ -1,20 +1,18 @@
 <template>
   <div class="search-view">
     <SearchByTitle v-model:title="searchValue"></SearchByTitle>
-    <TheButton button="Search" @click="Search()"/>
+    <TheButton button="Search" isPointer @click="Search()"/>
   </div>
   <div class="dropdown">
     <TheDropdown genre="Genre" date="Date"></TheDropdown>
   </div>
   <div class="button-clear">
-    <TheButton button="Clear" @is-button="handleEmitValue($event)" />
+    <TheButton button="Clear" isLarge isPointer @is-button="handleEmitValue($event)" />
   </div>
 </template>
 
 <script lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useLazyQuery } from '@vue/apollo-composable'
-import { GET_MOVIE_QUERY } from '@/query/movieQuery'
 import SearchByTitle from '@/components/SearchByTitle.vue';
 import TheButton from '@/components/TheButton.vue';
 import TheDropdown from '@/components/TheDropdown.vue';
@@ -34,7 +32,7 @@ export default {
 
     const Search = () => {
       writtenValue.value = searchValue.value
-      emit('emitSearch', writtenValue.value)
+      emit('emit-search', writtenValue.value)
       console.log("Written in input:", writtenValue.value)
     }
 

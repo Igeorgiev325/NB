@@ -1,4 +1,4 @@
-export default interface defaultImageInterface {
+export default interface DefaultImageInterface {
     id?: string,
     title?: string,
     url?: string
