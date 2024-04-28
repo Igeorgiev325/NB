@@ -2,13 +2,12 @@
   <button :class="{
     'larger-button': isLarge,
     'pointer-button': isPointer
-  }" @click="changeButtonValue()" type="button">
+  }" type="button">
     {{ button }}
   </button>
 </template>
 
 <script lang="ts">
-import { ref, computed, watch }  from 'vue'
 
 export default {
   props: {
@@ -25,19 +24,9 @@ export default {
       default: false
     }
   },
-  emits: ["isButton"],
-  setup(props, { emit }) {
-    let buttonValue = ref<boolean>(false)
-
-    const changeButtonValue = () => buttonValue.value = !buttonValue.value  
-
-    watch(buttonValue, (val) => {
-        emit("isButton", val)
-    })
+  setup() {
 
     return {
-        buttonValue,
-        changeButtonValue
     }
   }
 }

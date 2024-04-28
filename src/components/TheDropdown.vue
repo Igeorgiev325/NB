@@ -3,19 +3,20 @@
     <div class="genre-dropdown">
       <label for="length-select">{{ genre }}</label>
       <select id="length-select">
-        <option>{{ selectGenre }}</option>
+        <option v-for="genre in movieGenre">{{ genre }}</option>
       </select>
     </div>
     <div class="date-dropdown">
       <label for="date-select">{{ date }}</label>
       <select id="date-select">
-        <option>{{ selectDate }}</option>
+        <option v-for="release in movieRelease">{{ release }}</option>
       </select>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { inject, ref } from 'vue'
 export default {
   props: {
     genre: {
@@ -26,21 +27,16 @@ export default {
       type: String,
       required: true
     },
-    selectGenre: {
-      type: String,
-      required: false,
-      default: 'Genre'
+    movieGenre: {
+      required: false
     },
-    selectDate: {
-      type: String,
-      required: false,
-      default: 'Date'
+    movieRelease: {
+      required: false
     }
   },
   setup() {
     
     return {
-
     }
   }
 }
