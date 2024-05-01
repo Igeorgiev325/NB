@@ -31,7 +31,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 20rem;
+  width: 15rem;
   padding: 0.5rem 1rem 0;
 }
 

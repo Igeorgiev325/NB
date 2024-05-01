@@ -26,17 +26,6 @@ import { GET_MOVIE_DEFAULT_IMAGE } from '@/query/imageQuery'
 import { useQuery, useLazyQuery } from '@vue/apollo-composable'
 import { watch, ref, onMounted } from 'vue'
 import  type defaultImageInterface  from '@/type/DefaultImageInterface'
-import type { PropType } from 'vue'
-// import type movieInterface from '@/type/movieInterface'
-
-interface MovieInterface {
-  title: any
-  description: any
-  genre: any
-  release: any
-  length: any
-  featureImage: any
-}
 
 export default {
   props: {

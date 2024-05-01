@@ -1,13 +1,13 @@
 <template>
   <div class="component">
     <div class="genre-dropdown">
-      <label for="length-select">{{ genre }}</label>
-      <select id="length-select">
+      <label for="length-select">{{ labelGenre }}</label>
+      <select v-model="selectedGenre" id="length-select">
         <option v-for="genre in movieGenre">{{ genre }}</option>
       </select>
     </div>
     <div class="date-dropdown">
-      <label for="date-select">{{ date }}</label>
+      <label for="date-select">{{ labelRelease }}</label>
       <select id="date-select">
         <option v-for="release in movieRelease">{{ release }}</option>
       </select>
@@ -16,14 +16,14 @@
 </template>
 
 <script lang="ts">
-import { inject, ref } from 'vue'
+import { ref, watch } from 'vue'
 export default {
   props: {
-    genre: {
+    labelGenre: {
       type: String,
       required: true
     },
-    date: {
+    labelRelease: {
       type: String,
       required: true
     },
@@ -34,9 +34,15 @@ export default {
       required: false
     }
   },
-  setup() {
-    
+  setup(props, { emit }) {
+    const selectedGenre = ref()
+    watch(selectedGenre, newSelectedGenre => {
+      emit('dropdownGenre', newSelectedGenre)
+      console.log("SELECTED", newSelectedGenre)
+    })
+
     return {
+      selectedGenre
     }
   }
 }

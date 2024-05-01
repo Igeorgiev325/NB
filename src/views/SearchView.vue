@@ -4,7 +4,7 @@
     <TheButton button="Search" isPointer @click="Search()"/>
   </div>
   <div class="dropdown">
-    <TheDropdown genre="Genre" date="Date"></TheDropdown>
+    <TheDropdown labelGenre="Genre" date="Date"></TheDropdown>
   </div>
   <div class="button-clear">
     <TheButton button="Clear" isLarge isPointer @is-button="handleEmitValue($event)" />
