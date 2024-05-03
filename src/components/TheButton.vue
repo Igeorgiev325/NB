@@ -38,7 +38,7 @@ export default {
 }
 
 .pointer-button {
-  cursor: pointer;
+  cursor: cell;
 }
 
 </style>

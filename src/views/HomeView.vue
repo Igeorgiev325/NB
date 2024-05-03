@@ -1,7 +1,7 @@
 <template>
   <div class="search-view">
     <SearchByTitle v-model:title="searchValue"></SearchByTitle>
-    <TheButton button="Search" isPointer @click="Search()"/>
+    <TheButton button="Search" @click="Search()"/>
   </div>
   <div class="dropdown">
     <TheDropdown 
@@ -42,16 +42,18 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, computed, onMounted, provide } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useLazyQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
 import TheMovie from '@/components/TheMovie.vue'
-import type { MoviesModel } from '@/type/MoviesMode'
 import SearchByTitle from '@/components/SearchByTitle.vue'
 import TheDropdown from '@/components/TheDropdown.vue'
 import TheButton from '@/components/TheButton.vue'
 import AboutView from './AboutView.vue'
 import { GET_GENRE_QUERY } from '@/query/genreQuery'
+import type { EntriesInterface } from '@/type/EntriesInterface'
+import type { MovieInterface } from '@/type/MovieInterface'
+import type { DropdownInterface, GenreReleaseInterface } from '@/type/DropdownInterface'
 
 export default {
   components: {
@@ -62,13 +64,12 @@ export default {
     AboutView
   },
   setup() {
-
     const showEvents = ref<boolean | undefined>(true)
 
     const moviesCount = ref<number>()
     const moviesShowingCount = ref<number>()
     
-    const movies = ref<MoviesModel[]>()
+    const movies = ref<MovieInterface[]>()
     const getGenre = ref<string[]>()
     const getRelease = ref<string[]>()
     const getValueFromSearch = ref<string>()
@@ -81,16 +82,17 @@ export default {
 
     const genreInDropdown = ref()
 
-    const { result, load, refetch } = useLazyQuery(GET_MOVIE_QUERY, {
+    const { result, load, refetch } = useLazyQuery<EntriesInterface>(GET_MOVIE_QUERY, {
       getValueFromSearch,
       dropdownGenre
     })
 
     watch(result, val => {
-      movies.value = val.entries
-      moviesCount.value = val.entryCount
-      moviesShowingCount.value = val.entries.length
+      movies.value = val?.entries
+      moviesCount.value = val?.entryCount
+      moviesShowingCount.value = val?.entries.length
 
+      console.log(movies.value)
       console.log(val)
     })
 
@@ -98,13 +100,13 @@ export default {
       return moviesShowingCount.value !== 0 ? '' : "No results found"
     })
 
-    const { result: resultGenre, load: loadGenre } = useLazyQuery(GET_GENRE_QUERY, {
+    const { result: resultDropdown, load: loadDropdown } = useLazyQuery<DropdownInterface>(GET_GENRE_QUERY, {
       genre
     })
 
-    watch (resultGenre, val => {
-      moviesGenre.value = val.entries.map((element: MoviesModel) => element.genre.toString())
-      getRelease.value = val.entries.map((element: MoviesModel) => element.release.slice(0, 4))
+    watch (resultDropdown, val => {
+      moviesGenre.value = val?.entries.map((element: GenreReleaseInterface) => element.genre.toString())
+      getRelease.value = val?.entries.map((element: GenreReleaseInterface) => element.release.slice(0, 4))
 
       let unique = moviesGenre.value?.join()
       unique = Array.from(new Set(unique?.split(','))).toString()
@@ -126,7 +128,7 @@ export default {
 
     onMounted(() => {
       load()
-      loadGenre()
+      loadDropdown()
     })
 
     return {
@@ -162,11 +164,10 @@ export default {
 .wrapper-button-count {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
 }
 .button-clear {
   grid-column-start: 2;
-  display: flex;
+  display: grid;
   justify-content: center;
   margin: 1rem 0 1rem 0;
 }
