@@ -1,10 +1,14 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <input type="text" placeholder="Enter Pokemon name" v-model="pokemonName">
-    <TheButton button="Fetch" @click=fetchData()></TheButton>
-    <div>
+    <input type="text" placeholder="Enter Pokemon name" v-model="pokemonSearch">
+    <TheButton button="Fetch sprite" @click=fetchSprite()></TheButton>
+    <TheButton button="Fetch names" @click="fetchNames()"></TheButton>
+    <div :class="{ 'border-for-sprite': isSprite }">
       <img :class="{ 'hide-element': !isSprite }" :src="pokemonSprite" alt="Pokomon Sprite">
+    </div>
+    <div>
+      {{ pokemonName }}
     </div>
   </div>
 </template>
@@ -13,23 +17,36 @@
 import { ref, computed } from 'vue'
 import TheButton from '@/components/TheButton.vue'
 
+interface PokemonDataInterface {
+  name: string,
+  url: string
+}
+
+interface PokemonInterface {
+  count: number,
+  next: string,
+  previous: null,
+  results: PokemonDataInterface[]
+}
+
 export default {
   components: {
     TheButton
   },
   setup() {
+    const pokemonSearch = ref<string>()
+    const pokemonSprite = ref<string>()
     const pokemonName = ref<string>()
-    const pokemonSprite = ref()
     
     const lowerCasePokemon = computed(() => {
-      return pokemonName.value?.toLowerCase()
+      return pokemonSearch.value?.toLowerCase().trim()
     })
     
     const isSprite = computed(() => {
       return pokemonSprite.value ? true : false
     })
     
-    async function fetchData() {
+    const fetchSprite = async () => {
       try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${lowerCasePokemon.value}`)
         if(!response.ok) {
@@ -37,8 +54,23 @@ export default {
         }
         const data = await response.json()
         pokemonSprite.value = data.sprites.front_default
-        console.log(data.name)
         
+      }
+      catch(error) {
+        console.error(error)
+      }
+    }
+
+    const fetchNames = async () => {
+      try {
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000')
+        if(response.ok) {
+          const data: PokemonInterface = await response.json()
+          pokemonName.value = data.results.map((element: PokemonDataInterface) => element.name).join(' ')
+          console.log(pokemonName.value)
+        } else {
+          throw new Error("Could not fetch resource")
+        }
       }
       catch(error) {
         console.error(error)
@@ -56,16 +88,22 @@ export default {
     // .catch(error => console.error(error))
     
     return {
+      pokemonSearch,
       pokemonName,
       pokemonSprite,
       isSprite,
-      fetchData
+      fetchSprite,
+      fetchNames
     }
   }
 }
 </script>
 
 <style>
+.border-for-sprite {
+  border: 0.5rem solid green;
+  width: fit-content;
+}
 .hide-element {
   display: none;
 }
