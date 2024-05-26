@@ -1,34 +1,40 @@
 <template>
   <div class="search-view">
-    <SearchByTitle v-model:title="searchValue"></SearchByTitle>
-    <TheButton button="Search" @click="Search()"/>
+    <SearchByTitle v-model:title="searchTitle"></SearchByTitle>
+    <TheButton name="Search" @click="Search()"/>
   </div>
   <div class="dropdown">
     <TheDropdown 
       labelGenre="Genre" 
-      labelRelease="Date" 
-      :movieGenre="genreInDropdown" 
-      :movieRelease="getRelease" 
+      :movieGenre="filteredGenresDropdown"
       @dropdown-genre="handleDropdownGenre($event)">
     </TheDropdown>
   </div>
   <div class="wrapper-button-count">
+    <div class="change-view">
+      <div class="grid-view">
+        <TheButton name="grid"></TheButton>
+      </div>
+      <div class="list-view">
+        <TheButton name="list"></TheButton>
+      </div>
+    </div>
     <div class="button-clear">
-      <TheButton button="Clear" isLarge isPointer @click="clearResult()" />
+      <TheButton name="Clear" isLarge isPointer @click="clearResult()" />
     </div>
     <div class="movie-count">
       <div>
-        Movies: {{ moviesCount }}
+        Movies: {{ countMovies }}
       </div>
       <div>
-        Currently: {{ moviesShowingCount }}
+        Currently: {{ countCurrentMovies }}
       </div>
     </div>
   </div>
 
   <main class="main">
-    <TheMovie v-show="showEvents"
-      v-for="movie in movies"
+    <TheMovie v-show="isShowEvents"
+      v-for="movie in allMoviesDetails"
       :key ="movie.id"
       :title="movie.title"
       :description="movie.description"
@@ -50,10 +56,15 @@ import SearchByTitle from '@/components/SearchByTitle.vue'
 import TheDropdown from '@/components/TheDropdown.vue'
 import TheButton from '@/components/TheButton.vue'
 import AboutView from './AboutView.vue'
-import { GET_GENRE_QUERY } from '@/query/genreQuery'
+import { GET_DROPDOWN_ITEMS_QUERY } from '@/query/dropdownItemsQuery'
 import type { EntriesInterface } from '@/type/EntriesInterface'
 import type { MovieInterface } from '@/type/MovieInterface'
 import type { DropdownInterface, GenreReleaseInterface } from '@/type/DropdownInterface'
+
+export interface QuerySearchModel {
+  getMovieTitle: string | null,
+  getGenreParam: string | null
+}
 
 export default {
   components: {
@@ -64,85 +75,103 @@ export default {
     AboutView
   },
   setup() {
-    const showEvents = ref<boolean | undefined>(true)
+    const isShowEvents = ref<boolean | undefined>(true)
 
-    const moviesCount = ref<number>()
-    const moviesShowingCount = ref<number>()
+    const countMovies = ref<number>()
+    const countCurrentMovies = ref<number>()
     
-    const movies = ref<MovieInterface[]>()
-    const getGenre = ref<string[]>()
-    const getRelease = ref<string[]>()
-    const getValueFromSearch = ref<string>()
-    const dropdownGenre = ref<string>()
+    const allMoviesDetails = ref<MovieInterface[]>()
+    
+    const searchTitle = ref<string | undefined>()
+    const newSearchTitle = ref<string | undefined | null>()
+    
+    const allGenres = ref<string[]>()
+    const filteredGenresDropdown = ref()
+    const selectedGenreInDropdown = ref<string | null>()
 
-    const moviesGenre = ref<string[]>()
-    const genre = ref<string>()
-
-    const searchValue = ref<string>('')
-
-    const genreInDropdown = ref()
-
-    const { result, load, refetch } = useLazyQuery<EntriesInterface>(GET_MOVIE_QUERY, {
-      getValueFromSearch,
-      dropdownGenre
-    })
-
-    watch(result, val => {
-      movies.value = val?.entries
-      moviesCount.value = val?.entryCount
-      moviesShowingCount.value = val?.entries.length
-
-      console.log(movies.value)
-      console.log(val)
-    })
-
+    const gridView = <boolean>(true)
+    const listView = <boolean>(false)
+    
     const isResults = computed(() => {
-      return moviesShowingCount.value !== 0 ? '' : "No results found"
+      return countCurrentMovies.value !== 0 ? '' : "No results found"
     })
 
-    const { result: resultDropdown, load: loadDropdown } = useLazyQuery<DropdownInterface>(GET_GENRE_QUERY, {
-      genre
-    })
+    const { result: resultDropdown, load: loadDropdown } = useLazyQuery<DropdownInterface>(GET_DROPDOWN_ITEMS_QUERY)
 
     watch (resultDropdown, val => {
-      moviesGenre.value = val?.entries.map((element: GenreReleaseInterface) => element.genre.toString())
-      getRelease.value = val?.entries.map((element: GenreReleaseInterface) => element.release.slice(0, 4))
+      allGenres.value = val?.entries.map((element: GenreReleaseInterface) => element.genre.toString())
 
-      let unique = moviesGenre.value?.join()
-      unique = Array.from(new Set(unique?.split(','))).toString()
-      genreInDropdown.value = unique.split(',')
+      let uniqueGenres = allGenres.value?.join()
+      filteredGenresDropdown.value = Array.from(new Set(uniqueGenres?.split(',')))
+    })
+    
+    let handleDropdownGenre = (val: string) => {
+      selectedGenreInDropdown.value = val
+    }
+
+    const { result: resultMovies, load: loadMovies, refetch: refetchMovies } = useLazyQuery<EntriesInterface>(GET_MOVIE_QUERY)
+
+    watch(resultMovies, val => {
+      allMoviesDetails.value = val?.entries
+      countMovies.value = val?.entryCount
+      countCurrentMovies.value = val?.entries.length
+
+      console.log("All Movies ", allMoviesDetails.value)
+      console.log("All Entries ", val)
     })
 
-    const Search = () => {
-      getValueFromSearch.value = searchValue.value
-    }
-    
-    const clearResult = () => {
-      searchValue.value = ''
-      refetch()
+    const loadQueries = () => {
+      const queryObj: QuerySearchModel = {
+        getMovieTitle: null,
+        getGenreParam: null
+      } 
+
+      if (newSearchTitle.value) {
+        queryObj.getMovieTitle = newSearchTitle.value
+      }
+
+      if (selectedGenreInDropdown.value) {
+        queryObj.getGenreParam = selectedGenreInDropdown.value
+      }
+      
+      loadMovies(undefined, queryObj)
     }
 
-    const handleDropdownGenre = (val: string) => {
-      dropdownGenre.value = val
+    
+    watch(selectedGenreInDropdown,  () => {
+      loadQueries()
+    })
+
+    watch(newSearchTitle,  () => {
+      loadQueries()
+    })
+    
+    const Search = () => {
+      newSearchTitle.value = searchTitle.value
+      loadQueries()
+    }
+
+    const clearResult = () => {
+      newSearchTitle.value = null
+      selectedGenreInDropdown.value = null
+      refetchMovies()
     }
 
     onMounted(() => {
-      load()
+      loadQueries()
       loadDropdown()
     })
 
     return {
-      movies,
-      showEvents,
-      moviesCount,
-      searchValue,
+      allMoviesDetails,
+      isShowEvents,
+      countMovies,
+      searchTitle,
       Search,
       clearResult,
-      getGenre,
-      getRelease,
       handleDropdownGenre,
-      genreInDropdown,
-      moviesShowingCount,
+      filteredGenresDropdown,
+      countCurrentMovies,
       isResults
     }
   }
@@ -164,6 +193,12 @@ export default {
 .wrapper-button-count {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+}
+.change-view {
+  grid-column-start: 1;
+  display: flex;
+  align-items: end;
+  margin-left: 1.5rem;
 }
 .button-clear {
   grid-column-start: 2;

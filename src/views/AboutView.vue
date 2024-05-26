@@ -2,8 +2,8 @@
   <div class="about">
     <h1>This is an about page</h1>
     <input type="text" placeholder="Enter Pokemon name" v-model="pokemonSearch">
-    <TheButton button="Fetch sprite" @click=fetchSprite()></TheButton>
-    <TheButton button="Fetch names" @click="fetchNames()"></TheButton>
+    <TheButton name="Fetch sprite" @click=fetchSprite()></TheButton>
+    <TheButton name="Fetch names" @click="fetchNames()"></TheButton>
     <div :class="{ 'border-for-sprite': isSprite }">
       <img :class="{ 'hide-element': !isSprite }" :src="pokemonSprite" alt="Pokomon Sprite">
     </div>

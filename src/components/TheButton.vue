@@ -3,7 +3,7 @@
     'larger-button': isLarge,
     'pointer-button': isPointer
   }" type="button">
-    {{ button }}
+    {{ name }}
   </button>
 </template>
 
@@ -11,7 +11,7 @@
 
 export default {
   props: {
-    button: {
+    name: {
       type: String,
       default: 'Push'
     },
