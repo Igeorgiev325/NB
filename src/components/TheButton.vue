@@ -1,7 +1,8 @@
 <template>
   <button :class="{
     'larger-button': isLarge,
-    'pointer-button': isPointer
+    'pointer-button': isPointer,
+    'no-radius': isRadius
   }" type="button">
     {{ name }}
   </button>
@@ -22,6 +23,10 @@ export default {
     isPointer: {
       type: Boolean,
       default: false
+    },
+    isRadius: {
+      type: Boolean,
+      default: false
     }
   },
   setup() {
@@ -36,9 +41,12 @@ export default {
 .larger-button {
   padding: 0.5rem 1.5rem;
 }
-
 .pointer-button {
   cursor: cell;
+}
+.no-radius {
+  border-radius: 0rem;
+  width: 3rem;
 }
 
 </style>

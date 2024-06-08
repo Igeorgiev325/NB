@@ -1,5 +1,6 @@
 <template>
   <input
+    id="search-text"
     class="search-text" 
     type="text" 
     placeholder="Search by title" 

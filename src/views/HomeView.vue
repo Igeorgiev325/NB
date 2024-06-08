@@ -1,7 +1,7 @@
 <template>
   <div class="search-view">
     <SearchByTitle v-model:title="searchTitle"></SearchByTitle>
-    <TheButton name="Search" @click="Search()"/>
+    <TheButton id="btn-search" name="Search" @click="Search()"/>
   </div>
   <div class="dropdown">
     <TheDropdown 
@@ -13,10 +13,10 @@
   <div class="wrapper-button-count">
     <div class="change-view">
       <div class="grid-view">
-        <TheButton name="grid"></TheButton>
+        <TheButton name="grid" isRadius></TheButton>
       </div>
       <div class="list-view">
-        <TheButton name="list"></TheButton>
+        <TheButton name="list" isRadius></TheButton>
       </div>
     </div>
     <div class="button-clear">
@@ -152,14 +152,25 @@ export default {
     }
 
     const clearResult = () => {
+      searchTitle.value = undefined
       newSearchTitle.value = null
       selectedGenreInDropdown.value = null
       refetchMovies()
     }
 
+    
     onMounted(() => {
       loadQueries()
       loadDropdown()
+      
+      const inputSearch = document.getElementById('search-text')
+      
+      inputSearch?.addEventListener('keyup', (event: any) => {
+        if (event.key === 'Enter') {
+          console.log("Pressed ", event.key)
+          Search()
+        }
+      })
     })
 
     return {
