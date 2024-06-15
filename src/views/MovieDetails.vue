@@ -1,30 +1,32 @@
 <template>
   <section class="wrapper">
-    <img :src='featureImage ?? urlFromImage'>
+    <img :src='allMovies?.featureImage[0].url ?? urlFromImage'>
     <h2 class="title">
-      {{ title }}
+      {{ allMovies?.title }}
     </h2>
     <div class="description">
-      {{ description }}
+      {{ allMovies?.description }}
     </div>
     <div class="genre">
-      {{ genre }}
+      {{ allMovies?.genre }}
     </div>
     <div class="release-and-length">
       <div class="release">
-        Release date: {{ release }}
+        Release date: {{ allMovies?.release }}
       </div>
       <div class="length">
-        Length: {{ length }} mins
+        Length: {{ allMovies?.length }} mins
       </div>
     </div>
   </section>
+
 </template>
 
 <script lang="ts">
+import type { MovieInterface } from '@/type/MovieInterface';
+import { type PropType, ref, watch, onMounted } from 'vue'
 import { GET_MOVIE_DEFAULT_IMAGE } from '@/query/imageQuery'
-import { useQuery, useLazyQuery } from '@vue/apollo-composable'
-import { watch, ref, onMounted } from 'vue'
+import { useLazyQuery } from '@vue/apollo-composable'
 import type { FeatureImageModel } from "@/type/FeatureImageModel"
 
 interface AssetImageModel {
@@ -33,46 +35,25 @@ interface AssetImageModel {
 
 export default {
   props: {
-    title: {
-      type: String,
-      required: false
-    },
-    description: {
-      type: String,
-      required: false
-    },
-    genre: {
-      type: Array,
-      required: false
-    },
-    release: {
-      type: String,
-      required: false
-    },
-    length: {
-      type: Number,
-      required: false
-    },
-    featureImage: {
-      type: String,
+    allMovies: {
+      type: Object as PropType<MovieInterface>,
       required: false
     }
   },
   setup() {
-    //const defaultImage: string = `@/assets/alien.jpg`
-    const defaultImage = ref<FeatureImageModel>()
+
     const urlFromImage = ref<string>()
 
     const { result, load } = useLazyQuery<AssetImageModel>(GET_MOVIE_DEFAULT_IMAGE)
 
-    onMounted(() => {
-      load()
-    })
     watch(result, value => {
       urlFromImage.value = value?.asset.url
     })
 
-  
+    onMounted(() => {
+      load()
+    })
+    
     return {
       urlFromImage
     }

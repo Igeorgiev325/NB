@@ -3,8 +3,8 @@
     <div class="wrapper">
       <nav class="flex">
         <RouterLink to="/">Home</RouterLink>
+        <RouterLink to ="/movie">Movie</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/movie">Movie</RouterLink>
       </nav>
     </div>
   </header>
@@ -31,7 +31,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 15rem;
+  width: 20rem;
   padding: 0.5rem 1rem 0;
 }
 

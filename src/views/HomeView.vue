@@ -33,17 +33,9 @@
   </div>
 
   <main class="main">
-    <TheMovie v-show="isShowEvents"
-      v-for="movie in allMoviesDetails"
-      :key ="movie.id"
-      :title="movie.title"
-      :description="movie.description"
-      :genre="movie.genre"
-      :release="movie.release"
-      :length="movie.length"
-      :featureImage="movie.featureImage[0].url"
-    />
+    <MovieDetails v-for="movie in allMoviesDetails" :allMovies="movie"></MovieDetails>
   </main>
+
   <h1>{{ isResults }}</h1>
 </template>
 
@@ -51,11 +43,11 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { useLazyQuery } from '@vue/apollo-composable'
 import { GET_MOVIE_QUERY } from '@/query/movieQuery'
-import TheMovie from '@/components/TheMovie.vue'
 import SearchByTitle from '@/components/SearchByTitle.vue'
 import TheDropdown from '@/components/TheDropdown.vue'
 import TheButton from '@/components/TheButton.vue'
 import AboutView from './AboutView.vue'
+import MovieDetails from '@/views/MovieDetails.vue'
 import { GET_DROPDOWN_ITEMS_QUERY } from '@/query/dropdownItemsQuery'
 import type { EntriesInterface } from '@/type/EntriesInterface'
 import type { MovieInterface } from '@/type/MovieInterface'
@@ -68,11 +60,11 @@ export interface QuerySearchModel {
 
 export default {
   components: {
-    TheMovie,
     SearchByTitle,
     TheDropdown,
     TheButton,
-    AboutView
+    AboutView,
+    MovieDetails
   },
   setup() {
     const isShowEvents = ref<boolean | undefined>(true)
